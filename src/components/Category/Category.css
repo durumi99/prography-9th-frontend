@@ -1,0 +1,14 @@
+.categoryButton {
+  border-radius: 15px; 
+  padding: 10px 15px;
+  margin: 1px;
+  font-size: 10px;
+  border: none; 
+  cursor: pointer; 
+}
+
+.categoryButton.isSelected {
+  background-color: #3498db;
+  color: #fff;
+  border-color: #2980b9;
+}

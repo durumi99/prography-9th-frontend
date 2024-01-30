@@ -1,25 +1,29 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Category from './components/Category/Category';
+import Header from './components/Header/Header';
+import Option from './components/Option/Option';
+import ImageList from './components/ImageList/ImageList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = (props) => {
+	return (
+		<div>
+			<Header />
+			<div className='home'>
+				<div classNMAme='childContainer'>
+					<div className='category'>
+						<Category></Category>
+					</div>
+					<div className='option'>
+						<Option></Option>
+					</div>
+					<div className='imageList'>
+						<ImageList></ImageList>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 export default App;
