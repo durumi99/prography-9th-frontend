@@ -44,7 +44,8 @@ const Category = () => {
 			{/* <img id='logo' src={logo} alt='prography' width='50px'/> */}
       {/* <span>Category</span> */}
 			{categories.map((category, index) => (
-					<label>
+				
+					<label key={category}>
             <button
 							className={`categoryButton ${selectedCategories.includes(index + 1) ? 'isSelected' : ''}`}
 							key={category}

@@ -10,7 +10,7 @@ const App = (props) => {
 		<div>
 			<Header />
 			<div className='home'>
-				<div classNMAme='childContainer'>
+				<div className='childContainer'>
 					<div className='category'>
 						<Category></Category>
 					</div>

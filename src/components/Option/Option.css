@@ -1,0 +1,11 @@
+.parentContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.childContainer {
+  /* 원하는 스타일을 여기에 추가 */
+  font-size: 10px;
+  min-width: 120px;
+}
