@@ -19,7 +19,7 @@ const Option = () => {
 
 	const handleSelectSortChange = (sortOption, index) => {
 		if (sortOption) {
-			setSelectSortValue(sortOption.value);
+			setSelectSortValue(sortOption);
 		} else {
 			setSelectSortValue("");
 		}
@@ -30,16 +30,20 @@ const Option = () => {
 
 	const handleSelectViewChange = (viewOption, index) => {
 		if (viewOption) {
-			setSelectViewValue(viewOption.value);
+			setSelectViewValue(viewOption);
 		} else {
 			setSelectViewValue("");
 		}
 	}
-
+	// console.log(selectSortValue);
+	// console.log(selectViewValue);
+	
 	return (
 		<div className="parentContainer">
       <div className="childContainer">
         {/* 자식 노드들 */}
+				{/* {selectSortValue ? : }
+				{selectViewValue} */}
 				<Select
 				ref={selectSortInputRef}
 				onChange={(sortOption) => {handleSelectSortChange(sortOption)}
