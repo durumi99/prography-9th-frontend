@@ -49,46 +49,35 @@ const App = (props) => {
 	];
 
 	const viewOptions = [
-		{ value: 0, label: '2개씩 보기' },
-		{ value: 1, label: '4개씩 보기' },
+		{ value: 2, label: '2개씩 보기' },
+		{ value: 4, label: '4개씩 보기' },
 	];
 
-	const [selectSortValue, setSelectSortValue] = useState(sortOptions[0]);
+	const [selectsortOption, setSelectsortOption] = useState(sortOptions[0]);
 	const selectSortInputRef = useRef(null);
 
 	const handleSelectSortChange = (sortOption, index) => {
 		if (sortOption) {
-			setSelectSortValue(sortOption);
+			setSelectsortOption(sortOption);
 		} else {
-			setSelectSortValue('');
+			setSelectsortOption('');
 		}
 	};
 
-	const [selectViewValue, setSelectViewValue] = useState(viewOptions[1]);
+	const [selectviewOption, setSelectviewOption] = useState(viewOptions[1]);
 	const selectViewInputRef = useRef(null);
 
 	const handleSelectViewChange = (viewOption, index) => {
 		if (viewOption) {
-			setSelectViewValue(viewOption);
+			setSelectviewOption(viewOption);
 		} else {
-			setSelectViewValue('');
+			setSelectviewOption('');
 		}
 	};
 
 	const [currentResultCount, setCurrentResultCount] = useState(0);
 	const [resultCount, setResultCount] = useState(0);
 
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		const res = await fetch('www.themealdb.com/api/json/v1/1/categories.php');
-	// 		const result = res.json();
-	// 		console.log(res);
-	// 		console.log(res.json());
-	// 		return result;
-	// 	};
-
-	// 	fetchData().then((res) => setData(res));
-	// }, []);
 	const [data, setData] = useState([]);
 	const [imageData, setImageData] = useState([]);
 
@@ -166,7 +155,9 @@ const App = (props) => {
 					<div className='imageList'>
 						<ImageList
 							data={data}
-							selectedCategories={selectedCategories}></ImageList>
+							selectedCategories={selectedCategories}
+							columnCount={selectviewOption.value}
+							sortOption={selectsortOption}></ImageList>
 					</div>
 				</div>
 			</div>
