@@ -73,6 +73,9 @@ const App = (props) => {
 		}
 	};
 
+	const [currentResultCount, setCurrentResultCount] = useState(0);
+	const [resultCount, setResultCount] = useState(0);
+
 	return (
 		<div>
 			<Header />
@@ -86,7 +89,9 @@ const App = (props) => {
 					</div>
 					<div className='row'>
 						<div className='result'>
-							<Result></Result>
+							<Result
+								currentResultCount={currentResultCount}
+								resultCount={resultCount}></Result>
 						</div>
 						<div className='option'>
 							<Option
