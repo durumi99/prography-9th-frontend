@@ -23,23 +23,24 @@ const App = (props) => {
 		// console.log(selectedCategories);
 		// console.log(selectedCategories);
 	};
+	const [categories, setCategories] = useState([]);
 
-	const categories = [
-		'Beef',
-		'Chicken',
-		'Dessert',
-		'Lamb',
-		'Miscellaneous',
-		'Pasta',
-		'Pork',
-		'Seafood',
-		'Side',
-		'Starter',
-		'Vegan',
-		'Vegetarian',
-		'Breakfast',
-		'Goat',
-	];
+	// const categories = [
+	// 	'Beef',
+	// 	'Chicken',
+	// 	'Dessert',
+	// 	'Lamb',
+	// 	'Miscellaneous',
+	// 	'Pasta',
+	// 	'Pork',
+	// 	'Seafood',
+	// 	'Side',
+	// 	'Starter',
+	// 	'Vegan',
+	// 	'Vegetarian',
+	// 	'Breakfast',
+	// 	'Goat',
+	// ];
 
 	const sortOptions = [
 		{ value: 0, label: '최신순' },
@@ -98,7 +99,13 @@ const App = (props) => {
 					'https://www.themealdb.com/api/json/v1/1/categories.php'
 				);
 				const result = res.data.categories;
-				// setImageByCategories();
+
+				let strCategories = [];
+				result.map((category, index) => {
+					strCategories.push(category.strCategory);
+				});
+
+				setCategories(strCategories);
 				setData(result);
 			} catch (e) {
 				console.log(e);
