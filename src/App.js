@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 import Category from './components/Category/Category';
 import Header from './components/Header/Header';
@@ -40,6 +40,39 @@ const App = (props) => {
 		'Goat',
 	];
 
+	const sortOptions = [
+		{ value: 0, label: '최신순' },
+		{ value: 1, label: '이름 오름차순' },
+		{ value: 2, label: '이름 내림차순' },
+	];
+
+	const viewOptions = [
+		{ value: 0, label: '2개씩 보기' },
+		{ value: 1, label: '4개씩 보기' },
+	];
+
+	const [selectSortValue, setSelectSortValue] = useState(sortOptions[0]);
+	const selectSortInputRef = useRef(null);
+
+	const handleSelectSortChange = (sortOption, index) => {
+		if (sortOption) {
+			setSelectSortValue(sortOption);
+		} else {
+			setSelectSortValue('');
+		}
+	};
+
+	const [selectViewValue, setSelectViewValue] = useState(viewOptions[1]);
+	const selectViewInputRef = useRef(null);
+
+	const handleSelectViewChange = (viewOption, index) => {
+		if (viewOption) {
+			setSelectViewValue(viewOption);
+		} else {
+			setSelectViewValue('');
+		}
+	};
+
 	return (
 		<div>
 			<Header />
@@ -56,7 +89,13 @@ const App = (props) => {
 							<Result></Result>
 						</div>
 						<div className='option'>
-							<Option></Option>
+							<Option
+								selectSortInputRef={selectSortInputRef}
+								handleSelectSortChange={handleSelectSortChange}
+								sortOptions={sortOptions}
+								selectViewInputRef={selectViewInputRef}
+								handleSelectViewChange={handleSelectViewChange}
+								viewOptions={viewOptions}></Option>
 						</div>
 					</div>
 					<div className='imageList'>
