@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 import Category from './components/Category/Category';
 import Header from './components/Header/Header';
@@ -19,7 +20,7 @@ const App = (props) => {
 			// 선택되어 있지 않은 경우, 선택
 			setSelectedCategories([...selectedCategories, index + 1]);
 		}
-
+		// console.log(selectedCategories);
 		// console.log(selectedCategories);
 	};
 
@@ -76,6 +77,58 @@ const App = (props) => {
 	const [currentResultCount, setCurrentResultCount] = useState(0);
 	const [resultCount, setResultCount] = useState(0);
 
+	// useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		const res = await fetch('www.themealdb.com/api/json/v1/1/categories.php');
+	// 		const result = res.json();
+	// 		console.log(res);
+	// 		console.log(res.json());
+	// 		return result;
+	// 	};
+
+	// 	fetchData().then((res) => setData(res));
+	// }, []);
+	const [data, setData] = useState([]);
+	const [imageData, setImageData] = useState([]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const res = await axios.get(
+					'https://www.themealdb.com/api/json/v1/1/categories.php'
+				);
+				const result = res.data.categories;
+				// setImageByCategories();
+				setData(result);
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		fetchData();
+		// fetchData().then((res) => setData(res));
+	}, []);
+
+	function setImageByCategories() {
+		// console.log(data);
+		// console.log(selectedCategories);
+
+		let cnt = 0;
+		data.map((el, index) => {
+			// if(el.)
+			// console.log(el.idCategory, selectedCategories.includes(el.idCategory));
+			if (selectedCategories.includes(el.idCategory)) {
+				console.log(el);
+				cnt++;
+			}
+			// console.log(
+			// 	el.idCategory,
+			// 	el.strCategory,
+			// 	selectedCategories.includes(el.idCategory)
+			// );
+		});
+		// console.log(cnt);
+	}
+	// console.log(data);
 	return (
 		<div>
 			<Header />
@@ -104,7 +157,9 @@ const App = (props) => {
 						</div>
 					</div>
 					<div className='imageList'>
-						<ImageList></ImageList>
+						<ImageList
+							data={data}
+							selectedCategories={selectedCategories}></ImageList>
 					</div>
 				</div>
 			</div>
