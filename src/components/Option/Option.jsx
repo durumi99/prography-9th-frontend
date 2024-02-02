@@ -1,9 +1,19 @@
 import React from "react";
 import './Option.css';
 import Select from 'react-select';
-
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 const Option = (props) => {
-	
+	// if(isBrowser) {
+	// 	console.log('isBrower');
+	// }
+	// if(isMobile) {
+	// 	console.log('isMobile');
+	// }
 	return (
 		<div className="parentContainer">
       <div className="childContainer">
@@ -16,6 +26,7 @@ const Option = (props) => {
 			/>
 		
       </div>
+			<BrowserView>
 			<div className="childContainer">
 			<Select
 				ref={props.selectViewInputRef}
@@ -24,7 +35,9 @@ const Option = (props) => {
 			options={props.viewOptions}
 			placeholder="4개씩 보기"
 			/>
+			
 			</div>
+			</BrowserView>
     </div>
 	);
 };

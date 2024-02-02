@@ -6,6 +6,12 @@ import Header from './components/Header/Header';
 import Result from './components/Result/Result';
 import Option from './components/Option/Option';
 import ImageList from './components/ImageList/ImageList';
+import {
+	BrowserView,
+	MobileView,
+	isBrowser,
+	isMobile,
+} from 'react-device-detect';
 
 const App = (props) => {
 	const [selectedCategories, setSelectedCategories] = useState([]);
@@ -45,7 +51,9 @@ const App = (props) => {
 		}
 	};
 
-	const [selectviewOption, setSelectviewOption] = useState(viewOptions[1]);
+	const [selectViewOption, setSelectviewOption] = useState(
+		isMobile ? 1 : viewOptions[1]
+	);
 	const selectViewInputRef = useRef(null);
 
 	const handleSelectViewChange = (viewOption, index) => {
@@ -145,7 +153,7 @@ const App = (props) => {
 					<div className='imageList'>
 						<ImageList
 							data={imageData}
-							columnCount={selectviewOption.value}
+							columnCount={selectViewOption.value}
 							sortOption={selectsortOption}></ImageList>
 					</div>
 				</div>

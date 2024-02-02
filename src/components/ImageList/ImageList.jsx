@@ -2,7 +2,6 @@ import React from 'react';
 import './ImageList.css';
 
 const ImageList = (props) => {
-	console.log(props.data);
   const sortData = (data, sortOption) => {
     return data.sort((a, b) => {
       if (sortOption === 0) {
@@ -22,7 +21,6 @@ const ImageList = (props) => {
   const sortedImageList = sortData(props.data, props.sortOption.value);
   // console.log(props);
 	return (
-    
     <div className={`image-grid columns-${props.columnCount}`}>
       {sortedImageList.map((el, index) => (
         <div key={index} className="image-item" >
