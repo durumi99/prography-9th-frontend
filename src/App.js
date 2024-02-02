@@ -103,7 +103,7 @@ const App = (props) => {
 					);
 					console.log(result);
 					setImageData(result);
-					// setResultCount(result.length);
+					setResultCount(result.length);
 				} catch (e) {
 					console.log(e);
 				}
@@ -111,6 +111,7 @@ const App = (props) => {
 			fetchData();
 		} else {
 			setImageData([]);
+			setResultCount(0);
 		}
 	}, [selectedCategories]);
 
