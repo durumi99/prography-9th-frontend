@@ -9,7 +9,7 @@ const Category = (props) => {
 				
 					<label key={category}>
             <button
-							className={`categoryButton ${props.selectedCategories.includes(index + 1) ? 'isSelected' : ''}`}
+							className={`categoryButton ${props.selectedCategories.includes(category) ? 'isSelected' : ''}`}
 							key={category}
 							onClick={() => props.handleCategoryClick(category, index)}
 						>

@@ -7,8 +7,8 @@ const ImageList = (props) => {
     <div className={`image-grid columns-${props.columnCount}`}>
       {props.data.map((el, index) => (
         <div key={index} className="image-item" >
-          <img className="image" src={el.strCategoryThumb} alt={el.strCategory} />
-          <p className="description">{el.strCategoryDescription.substring(0, 20)}</p>
+          <img className="image" src={el.strMealThumb} alt={el} />
+          <p className="description">{el.strMeal}</p>
         </div>
       ))}
     </div>

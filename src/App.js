@@ -11,36 +11,17 @@ const App = (props) => {
 	const [selectedCategories, setSelectedCategories] = useState([]);
 
 	const handleCategoryClick = (category, index) => {
-		if (selectedCategories.includes(index + 1)) {
+		if (selectedCategories.includes(category)) {
 			// 이미 선택되어 있던 경우, 선택 취소
 			setSelectedCategories(
-				selectedCategories.filter((item) => item !== index + 1)
+				selectedCategories.filter((item) => item !== category)
 			);
 		} else {
 			// 선택되어 있지 않은 경우, 선택
-			setSelectedCategories([...selectedCategories, index + 1]);
+			setSelectedCategories([...selectedCategories, category]);
 		}
-		// console.log(selectedCategories);
-		// console.log(selectedCategories);
 	};
 	const [categories, setCategories] = useState([]);
-
-	// const categories = [
-	// 	'Beef',
-	// 	'Chicken',
-	// 	'Dessert',
-	// 	'Lamb',
-	// 	'Miscellaneous',
-	// 	'Pasta',
-	// 	'Pork',
-	// 	'Seafood',
-	// 	'Side',
-	// 	'Starter',
-	// 	'Vegan',
-	// 	'Vegetarian',
-	// 	'Breakfast',
-	// 	'Goat',
-	// ];
 
 	const sortOptions = [
 		{ value: 0, label: '최신순' },
@@ -78,7 +59,7 @@ const App = (props) => {
 	const [currentResultCount, setCurrentResultCount] = useState(0);
 	const [resultCount, setResultCount] = useState(0);
 
-	const [data, setData] = useState([]);
+	// const [data, setData] = useState([]);
 	const [imageData, setImageData] = useState([]);
 
 	useEffect(() => {
@@ -93,38 +74,46 @@ const App = (props) => {
 				result.map((category, index) => {
 					strCategories.push(category.strCategory);
 				});
-
 				setCategories(strCategories);
-				setData(result);
 			} catch (e) {
 				console.log(e);
 			}
 		};
 		fetchData();
-		// fetchData().then((res) => setData(res));
 	}, []);
 
-	function setImageByCategories() {
-		// console.log(data);
+	useEffect(() => {
+		// console.log('렌더링 될때마다 실행');
 		// console.log(selectedCategories);
+		if (selectedCategories.length) {
+			const fetchData = async () => {
+				try {
+					let queryString =
+						'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
+					let result = [];
 
-		let cnt = 0;
-		data.map((el, index) => {
-			// if(el.)
-			// console.log(el.idCategory, selectedCategories.includes(el.idCategory));
-			if (selectedCategories.includes(el.idCategory)) {
-				console.log(el);
-				cnt++;
-			}
-			// console.log(
-			// 	el.idCategory,
-			// 	el.strCategory,
-			// 	selectedCategories.includes(el.idCategory)
-			// );
-		});
-		// console.log(cnt);
-	}
-	// console.log(data);
+					await Promise.all(
+						selectedCategories.map(async (strCategory, index) => {
+							// console.log(strCategory);
+							const res = await axios.get(queryString + strCategory);
+							// console.log(res.data.meals);
+							// result.push(res.data.meals);
+							Array.prototype.push.apply(result, res.data.meals);
+						})
+					);
+					console.log(result);
+					setImageData(result);
+					// setResultCount(result.length);
+				} catch (e) {
+					console.log(e);
+				}
+			};
+			fetchData();
+		} else {
+			setImageData([]);
+		}
+	}, [selectedCategories]);
+
 	return (
 		<div>
 			<Header />
@@ -154,8 +143,7 @@ const App = (props) => {
 					</div>
 					<div className='imageList'>
 						<ImageList
-							data={data}
-							selectedCategories={selectedCategories}
+							data={imageData}
 							columnCount={selectviewOption.value}
 							sortOption={selectsortOption}></ImageList>
 					</div>
