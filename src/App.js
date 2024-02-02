@@ -109,7 +109,7 @@ const App = (props) => {
 							Array.prototype.push.apply(result, res.data.meals);
 						})
 					);
-					console.log(result);
+
 					setImageData(result);
 					setResultCount(result.length);
 				} catch (e) {

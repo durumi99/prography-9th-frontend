@@ -22,7 +22,8 @@ const Option = (props) => {
 				onChange={(sortOption) => {props.handleSelectSortChange(sortOption)}
 			}
 			options={props.sortOptions}
-			placeholder="최신순"
+			// placeholder="최신순"
+			defaultValue={props.sortOptions[0]}
 			/>
 		
       </div>
@@ -33,7 +34,8 @@ const Option = (props) => {
 				onChange={(viewOption) => {props.handleSelectViewChange(viewOption)}
 			}
 			options={props.viewOptions}
-			placeholder="4개씩 보기"
+			// placeholder="4개씩 보기"
+			defaultValue={props.viewOptions[1]}
 			/>
 			
 			</div>

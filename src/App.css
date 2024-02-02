@@ -2,33 +2,37 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin : 50px;
-  /* width: 50%; */
+  margin-top : 50px;
+  /* width: 100%; */
 }
 
 .row {
   display: flex; /* 자식 노드를 가로로 배치하기 위해 flex 속성 적용 */
-  align-items: center; /* 가운데 정렬을 위해 align-items 속성 적용 */
-  /* gap: 10px; */
+  align-items: center; 
+  gap: 10px;
   position: relative;
   margin-top: 10px;
 }
 
 .result {
   position: absolute; /* 절대적인 위치 설정 */
-  top: 0; /* 위쪽에 위치하도록 설정 */
+  top: 10;/* 위쪽에 위치하도록 설정 */
 }
 
 .childContainer {
-  /* display: flex; */
+  /* display:block; */
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
   width : 75%;
-  /* font-size: 20px; */
+  min-width: 500px;
 }
 
 .option {
   margin-left: auto;
+}
+
+.imageList {
+  width:100%;
 }
