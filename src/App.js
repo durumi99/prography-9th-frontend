@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-// import { useLocation, useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Category from './components/Category/Category';
 import Header from './components/Header/Header';
@@ -16,21 +15,29 @@ import {
 	isMobile,
 } from 'react-device-detect';
 
+import queryString from 'query-string';
 const App = (props) => {
 	const apiService = useMemo(
 		() => new ApiService('https://www.themealdb.com/api/json/v1/1'),
 		[]
 	);
-	const sortOptions = [
-		{ value: 0, label: '최신순' },
-		{ value: 1, label: '이름 오름차순' },
-		{ value: 2, label: '이름 내림차순' },
-	];
 
-	const viewOptions = [
-		{ value: 2, label: '2개씩 보기' },
-		{ value: 4, label: '4개씩 보기' },
-	];
+	const sortOptions = useMemo(
+		() => [
+			{ value: 0, label: '최신순' },
+			{ value: 1, label: '이름 오름차순' },
+			{ value: 2, label: '이름 내림차순' },
+		],
+		[]
+	);
+
+	const viewOptions = useMemo(
+		() => [
+			{ value: 2, label: '2개씩 보기' },
+			{ value: 4, label: '4개씩 보기' },
+		],
+		[]
+	);
 
 	const [selectedCategories, setSelectedCategories] = useState([]);
 	const [categories, setCategories] = useState([]);
@@ -46,22 +53,30 @@ const App = (props) => {
 	const [hasMore, setHasMore] = useState(true);
 	const [loading, setLoading] = useState(false);
 
-	const handleCategoryClick = (category, index) => {
-		// const queryParams = new URLSearchParams(location.search);
-		// queryParams.set('category', category);
-		// history.push({ search: queryParams.toString() });
+	const location = useLocation();
+	const navigate = useNavigate();
+	const queryParams = queryString.parse(location.search);
 
+	const handleCategoryClick = (category, index) => {
+		let newSelectedCategories;
 		if (selectedCategories.includes(category)) {
-			setSelectedCategories(
-				selectedCategories.filter((item) => item !== category)
+			newSelectedCategories = selectedCategories.filter(
+				(item) => item !== category
 			);
 		} else {
-			setSelectedCategories([...selectedCategories, category]);
+			newSelectedCategories = [...selectedCategories, category];
 		}
+
+		setSelectedCategories(newSelectedCategories);
+
+		updateQueryParams({ category: newSelectedCategories.join(',') });
 	};
 
 	const handleSelectSortChange = (sortOption, index) => {
 		setSelectsortOption(sortOption || '');
+		updateQueryParams({
+			filter: sortOption ? getSortOptionText(sortOption) : '',
+		});
 	};
 
 	const handleSelectViewChange = (viewOption, index) => {
@@ -77,6 +92,26 @@ const App = (props) => {
 		}
 
 		setCurrentResultCount(newLoadedImages);
+	};
+
+	const getSortOptionText = (sortOption) => {
+		switch (sortOption.value) {
+			case 0:
+				return 'new';
+			case 1:
+				return 'asc';
+			case 2:
+				return 'desc';
+			default:
+				return '';
+		}
+	};
+
+	const updateQueryParams = (params) => {
+		const newParams =
+			params.category !== '' ? { ...queryParams, ...params } : '';
+
+		navigate({ search: queryString.stringify(newParams) });
 	};
 
 	useEffect(() => {
@@ -95,23 +130,12 @@ const App = (props) => {
 			}
 		};
 		fetchData();
-	}, [apiService]);
+	}, [apiService, categories]);
 
 	useEffect(() => {
 		if (selectedCategories.length) {
 			const fetchData = async () => {
 				try {
-					// let queryString =
-					// 	'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
-					// let result = [];
-
-					// await Promise.all(
-					// 	selectedCategories.map(async (strCategory, index) => {
-					// 		const res = await axios.get(queryString + strCategory);
-					// 		Array.prototype.push.apply(result, res.data.meals);
-					// 	})
-					// );
-
 					let result = [];
 
 					await Promise.all(
@@ -143,6 +167,21 @@ const App = (props) => {
 			setLoading(false);
 		}
 	}, [currentResultCount]);
+
+	useEffect(() => {
+		return;
+		const selectedCategories = queryParams.category
+			? queryParams.category.split(',')
+			: [];
+		setSelectedCategories(selectedCategories);
+
+		const sortOption = queryParams.filter
+			? sortOptions.find(
+					(option) => getSortOptionText(option) === queryParams.filter
+			  )
+			: sortOptions[0];
+		setSelectsortOption(sortOption || '');
+	}, [queryParams, selectedCategories, sortOptions]);
 
 	return (
 		<div>
