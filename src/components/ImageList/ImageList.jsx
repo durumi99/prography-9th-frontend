@@ -1,4 +1,6 @@
 import React from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import './ImageList.css';
 
 const ImageList = (props) => {
@@ -24,7 +26,7 @@ const ImageList = (props) => {
     <div className={`image-grid columns-${props.columnCount}`}>
       {sortedImageList.map((el, index) => (
         <div key={index} className="image-item" >
-          <img className="image" src={el.strMealThumb} alt={el} />
+          <LazyLoadImage className="image" alt={el} src={el.strMealThumb} effect="blur" delayMethod='debounce' />
           <p className="description">{el.strMeal}</p>
         </div>
       ))}

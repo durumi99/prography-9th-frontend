@@ -123,6 +123,8 @@ const App = (props) => {
 		}
 	}, [selectedCategories]);
 
+	// let observer = new IntersectionObserver(callback, options);
+
 	return (
 		<div>
 			<Header />

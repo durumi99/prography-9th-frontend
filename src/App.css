@@ -26,13 +26,13 @@
   align-items: center;
   gap: 10px;
   width : 75%;
-  min-width: 500px;
+  /* min-width: 500px; */
 }
 
 .option {
   margin-left: auto;
 }
 
-.imageList {
-  width:100%;
+.imageList { 
+  /* height:100%; */
 }
