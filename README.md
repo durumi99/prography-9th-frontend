@@ -7,7 +7,7 @@ Javascript, React, Axios, LazyLoadImage, QueryString
 ## Getting Started
 ```bash
 1. npm install
-2. npm run
+2. npm start
 ```
 
 ## Commit Convention
