@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 // import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
@@ -7,6 +7,8 @@ import Header from './components/Header/Header';
 import Result from './components/Result/Result';
 import Option from './components/Option/Option';
 import ImageList from './components/ImageList/ImageList';
+import ApiService from './services/ApiService';
+
 import {
 	BrowserView,
 	MobileView,
@@ -15,6 +17,10 @@ import {
 } from 'react-device-detect';
 
 const App = (props) => {
+	const apiService = useMemo(
+		() => new ApiService('https://www.themealdb.com/api/json/v1/1'),
+		[]
+	);
 	const sortOptions = [
 		{ value: 0, label: '최신순' },
 		{ value: 1, label: '이름 오름차순' },
@@ -55,19 +61,11 @@ const App = (props) => {
 	};
 
 	const handleSelectSortChange = (sortOption, index) => {
-		if (sortOption) {
-			setSelectsortOption(sortOption);
-		} else {
-			setSelectsortOption('');
-		}
+		setSelectsortOption(sortOption || '');
 	};
 
 	const handleSelectViewChange = (viewOption, index) => {
-		if (viewOption) {
-			setSelectviewOption(viewOption);
-		} else {
-			setSelectviewOption('');
-		}
+		setSelectviewOption(viewOption || '');
 	};
 
 	const handleLoadMoreImages = () => {
@@ -84,35 +82,43 @@ const App = (props) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const res = await axios.get(
-					'https://www.themealdb.com/api/json/v1/1/categories.php'
-				);
-				const result = res.data.categories;
+				const response = await apiService.getCategories();
+				const result = response.categories;
 
 				let strCategories = [];
-				result.map((category, index) => {
-					strCategories.push(category.strCategory);
-				});
+				result.map((category, index) =>
+					strCategories.push(category.strCategory)
+				);
 				setCategories(strCategories);
 			} catch (e) {
 				console.log(e);
 			}
 		};
 		fetchData();
-	}, []);
+	}, [apiService]);
 
 	useEffect(() => {
 		if (selectedCategories.length) {
 			const fetchData = async () => {
 				try {
-					let queryString =
-						'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
+					// let queryString =
+					// 	'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
+					// let result = [];
+
+					// await Promise.all(
+					// 	selectedCategories.map(async (strCategory, index) => {
+					// 		const res = await axios.get(queryString + strCategory);
+					// 		Array.prototype.push.apply(result, res.data.meals);
+					// 	})
+					// );
+
 					let result = [];
 
 					await Promise.all(
-						selectedCategories.map(async (strCategory, index) => {
-							const res = await axios.get(queryString + strCategory);
-							Array.prototype.push.apply(result, res.data.meals);
+						selectedCategories.map(async (strCategory) => {
+							const response = await apiService.getMealsByCategory(strCategory);
+							const meals = response.meals;
+							Array.prototype.push.apply(result, meals);
 						})
 					);
 
@@ -130,7 +136,7 @@ const App = (props) => {
 			setResultCount(0);
 			setCurrentResultCount(0);
 		}
-	}, [selectedCategories]);
+	}, [apiService, selectedCategories]);
 
 	useEffect(() => {
 		if (currentResultCount === 0) {

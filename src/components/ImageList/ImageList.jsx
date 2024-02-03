@@ -8,14 +8,15 @@ const ImageList = (props) => {
 
   const sortData = (data, sortOption) => {
     return data.sort((a, b) => {
-      if (sortOption === 0) {
-        const idMealA = parseInt(a.idMeal);
-        const idMealB = parseInt(b.idMeal);
-        return idMealB - idMealA;
-      } else if (sortOption === 1) {
-        return a.strMeal.localeCompare(b.strMeal);
-      } else if (sortOption === 2) {
-        return b.strMeal.localeCompare(a.strMeal);
+      switch (sortOption) {
+        case 0:
+          return parseInt(b.idMeal, 10) - parseInt(a.idMeal, 10);
+        case 1:
+          return a.strMeal.localeCompare(b.strMeal);
+        case 2:
+          return b.strMeal.localeCompare(a.strMeal);
+        default:
+          return 0;
       }
     });
   };
