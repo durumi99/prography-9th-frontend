@@ -55,7 +55,11 @@ const App = (props) => {
 
 	const location = useLocation();
 	const navigate = useNavigate();
-	const queryParams = queryString.parse(location.search);
+	// const queryParams = queryString.parse(location.search);
+	const queryParams = useMemo(
+		() => queryString.parse(location.search),
+		[location]
+	);
 
 	const handleCategoryClick = (category, index) => {
 		let newSelectedCategories;
@@ -169,7 +173,6 @@ const App = (props) => {
 	}, [currentResultCount]);
 
 	useEffect(() => {
-		return;
 		const selectedCategories = queryParams.category
 			? queryParams.category.split(',')
 			: [];
@@ -181,7 +184,7 @@ const App = (props) => {
 			  )
 			: sortOptions[0];
 		setSelectsortOption(sortOption || '');
-	}, [queryParams, selectedCategories, sortOptions]);
+	}, [queryParams, sortOptions]);
 
 	return (
 		<div>
