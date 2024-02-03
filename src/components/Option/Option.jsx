@@ -7,38 +7,36 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
+
 const Option = (props) => {
-	// if(isBrowser) {
-	// 	console.log('isBrower');
-	// }
-	// if(isMobile) {
-	// 	console.log('isMobile');
-	// }
+	const {
+  selectSortInputRef,
+  handleSelectSortChange,
+  sortOptions,
+  selectViewInputRef,
+  handleSelectViewChange,
+  viewOptions
+} = props;
+
 	return (
 		<div className="parentContainer">
       <div className="childContainer">
 				<Select
-				ref={props.selectSortInputRef}
-				onChange={(sortOption) => {props.handleSelectSortChange(sortOption)}
-			}
-			options={props.sortOptions}
-			// placeholder="최신순"
-			defaultValue={props.sortOptions[0]}
-			/>
-		
+				ref={selectSortInputRef}
+				onChange={(sortOption) => {handleSelectSortChange(sortOption)}}
+				options={sortOptions}
+				defaultValue={sortOptions[0]}
+				/>
       </div>
 			<BrowserView>
-			<div className="childContainer">
-			<Select
-				ref={props.selectViewInputRef}
-				onChange={(viewOption) => {props.handleSelectViewChange(viewOption)}
-			}
-			options={props.viewOptions}
-			// placeholder="4개씩 보기"
-			defaultValue={props.viewOptions[1]}
-			/>
-			
-			</div>
+				<div className="childContainer">
+					<Select
+						ref={selectViewInputRef}
+						onChange={(viewOption) => {handleSelectViewChange(viewOption)}}
+					options={viewOptions}
+					defaultValue={viewOptions[1]}
+					/>
+				</div>
 			</BrowserView>
     </div>
 	);

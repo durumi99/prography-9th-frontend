@@ -15,25 +15,6 @@ import {
 } from 'react-device-detect';
 
 const App = (props) => {
-	const [selectedCategories, setSelectedCategories] = useState([]);
-
-	const handleCategoryClick = (category, index) => {
-		// const queryParams = new URLSearchParams(location.search);
-		// queryParams.set('category', category);
-		// history.push({ search: queryParams.toString() });
-
-		if (selectedCategories.includes(category)) {
-			// 이미 선택되어 있던 경우, 선택 취소
-			setSelectedCategories(
-				selectedCategories.filter((item) => item !== category)
-			);
-		} else {
-			// 선택되어 있지 않은 경우, 선택
-			setSelectedCategories([...selectedCategories, category]);
-		}
-	};
-	const [categories, setCategories] = useState([]);
-
 	const sortOptions = [
 		{ value: 0, label: '최신순' },
 		{ value: 1, label: '이름 오름차순' },
@@ -45,8 +26,33 @@ const App = (props) => {
 		{ value: 4, label: '4개씩 보기' },
 	];
 
+	const [selectedCategories, setSelectedCategories] = useState([]);
+	const [categories, setCategories] = useState([]);
 	const [selectsortOption, setSelectsortOption] = useState(sortOptions[0]);
 	const selectSortInputRef = useRef(null);
+	const [selectViewOption, setSelectviewOption] = useState(
+		isMobile ? 1 : viewOptions[1]
+	);
+	const selectViewInputRef = useRef(null);
+	const [currentResultCount, setCurrentResultCount] = useState(0);
+	const [resultCount, setResultCount] = useState(0);
+	const [imageData, setImageData] = useState([]);
+	const [hasMore, setHasMore] = useState(true);
+	const [loading, setLoading] = useState(false);
+
+	const handleCategoryClick = (category, index) => {
+		// const queryParams = new URLSearchParams(location.search);
+		// queryParams.set('category', category);
+		// history.push({ search: queryParams.toString() });
+
+		if (selectedCategories.includes(category)) {
+			setSelectedCategories(
+				selectedCategories.filter((item) => item !== category)
+			);
+		} else {
+			setSelectedCategories([...selectedCategories, category]);
+		}
+	};
 
 	const handleSelectSortChange = (sortOption, index) => {
 		if (sortOption) {
@@ -56,11 +62,6 @@ const App = (props) => {
 		}
 	};
 
-	const [selectViewOption, setSelectviewOption] = useState(
-		isMobile ? 1 : viewOptions[1]
-	);
-	const selectViewInputRef = useRef(null);
-
 	const handleSelectViewChange = (viewOption, index) => {
 		if (viewOption) {
 			setSelectviewOption(viewOption);
@@ -69,11 +70,16 @@ const App = (props) => {
 		}
 	};
 
-	const [currentResultCount, setCurrentResultCount] = useState(0);
-	const [resultCount, setResultCount] = useState(0);
+	const handleLoadMoreImages = () => {
+		const loadCount = 20;
+		let newLoadedImages = currentResultCount + loadCount;
 
-	// const [data, setData] = useState([]);
-	const [imageData, setImageData] = useState([]);
+		if (newLoadedImages >= imageData.length) {
+			newLoadedImages = imageData.length;
+		}
+
+		setCurrentResultCount(newLoadedImages);
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -95,20 +101,14 @@ const App = (props) => {
 		fetchData();
 	}, []);
 
-	// useEffect(() => {
-	// 	console.log(currentResultCount);
-	// }, [currentResultCount]);
-
 	useEffect(() => {
-		// console.log('렌더링 될때마다 실행');
-		// console.log(selectedCategories);
 		if (selectedCategories.length) {
 			const fetchData = async () => {
 				try {
 					let queryString =
 						'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
 					let result = [];
-					// await setLoading(true);
+
 					await Promise.all(
 						selectedCategories.map(async (strCategory, index) => {
 							const res = await axios.get(queryString + strCategory);
@@ -120,7 +120,6 @@ const App = (props) => {
 					setResultCount(result.length);
 					setCurrentResultCount(Math.min(result.length, 20));
 					setHasMore(true);
-					// setLoading(false);
 				} catch (e) {
 					console.log(e);
 				}
@@ -134,26 +133,10 @@ const App = (props) => {
 	}, [selectedCategories]);
 
 	useEffect(() => {
-		if (currentResultCount === 0) setLoading(false);
-	}, [currentResultCount]);
-
-	const handleLoadMoreImages = () => {
-		// setLoading(true);
-
-		const loadCount = 20;
-		let newLoadedImages = currentResultCount + loadCount;
-
-		if (newLoadedImages >= imageData.length) {
-			newLoadedImages = imageData.length;
-			// setHasMore(false);
+		if (currentResultCount === 0) {
+			setLoading(false);
 		}
-
-		setCurrentResultCount(newLoadedImages);
-		// setLoading(false);
-	};
-
-	const [hasMore, setHasMore] = useState(true);
-	const [loading, setLoading] = useState(false);
+	}, [currentResultCount]);
 
 	return (
 		<div>
@@ -183,22 +166,15 @@ const App = (props) => {
 						</div>
 					</div>
 					<div className='imageList'>
-						{/* <ImageList
-							data={imageData}
-							currentResultCount={currentResultCount}
-							columnCount={selectViewOption.value}
-							sortOption={selectsortOption}
-							onLoadMore={handleLoadMoreImages}></ImageList> */}
 						<ImageList
-							data={imageData}
-							columnCount={selectViewOption.value}
+							imageData={imageData}
 							sortOption={selectsortOption}
+							columnCount={selectViewOption.value}
+							currentResultCount={currentResultCount}
 							loading={loading}
 							setLoading={setLoading}
 							hasMore={hasMore}
 							onLoadMore={handleLoadMoreImages}
-							setCurrentResultCount={setCurrentResultCount}
-							currentResultCount={currentResultCount}
 						/>
 					</div>
 				</div>

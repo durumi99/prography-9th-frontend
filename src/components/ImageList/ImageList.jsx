@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import './ImageList.css';
 
 const ImageList = (props) => {
-  // let isLoaded = false;
+  const { imageData, sortOption, columnCount, currentResultCount, loading, setLoading, hasMore, onLoadMore } = props;
 
   const sortData = (data, sortOption) => {
     return data.sort((a, b) => {
@@ -20,37 +20,30 @@ const ImageList = (props) => {
     });
   };
 
-  const sortedImageList = sortData(props.data, props.sortOption.value);
+  const sortedImageList = sortData(imageData, sortOption.value);
 
   const observer = useRef();
 
   const lastImageRef = (node) => {
-    // console.log('맨 아래 도착');
-    // console.log(props.loading);
-    // alert(props.currentResultCount);
-    // console.log('isLoaded', isLoaded);
-
-    if (!props.loading) return;
-
+    if (!loading) return;
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver((entries) => {
-      // console.log('맨 아래 도착');
-      if (entries[0].isIntersecting && props.hasMore) {
-        props.onLoadMore();
+      if (entries[0].isIntersecting && hasMore) {
+        onLoadMore();
       }
     });
 
     if (node) observer.current.observe(node);
   };
   const onLoad = () => {
-    props.setLoading(true);
+    setLoading(true);
   };
 
   return (
-    <div className={`image-grid columns-${props.columnCount}`}>
-      {sortedImageList.slice(0, props.currentResultCount).map((el, index) => (
-        <div key={index} ref={index === props.currentResultCount - 1 ? lastImageRef : null} className='image-item'>
+    <div className={`image-grid columns-${columnCount}`}>
+      {sortedImageList.slice(0, currentResultCount).map((el, index) => (
+        <div key={index} ref={index === currentResultCount - 1 ? lastImageRef : null} className='image-item'>
           <LazyLoadImage
             className='image'
             alt={el.strMeal}
