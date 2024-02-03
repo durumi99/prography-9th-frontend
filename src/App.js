@@ -7,7 +7,7 @@ import Result from './components/Result/Result';
 import Option from './components/Option/Option';
 import ImageList from './components/ImageList/ImageList';
 import ApiService from './services/ApiService';
-
+import queryString from 'query-string';
 import {
 	BrowserView,
 	MobileView,
@@ -15,8 +15,10 @@ import {
 	isMobile,
 } from 'react-device-detect';
 
-import queryString from 'query-string';
 const App = (props) => {
+	const location = useLocation();
+	const navigate = useNavigate();
+
 	const apiService = useMemo(
 		() => new ApiService('https://www.themealdb.com/api/json/v1/1'),
 		[]
@@ -39,6 +41,11 @@ const App = (props) => {
 		[]
 	);
 
+	const queryParams = useMemo(
+		() => queryString.parse(location.search),
+		[location]
+	);
+
 	const [selectedCategories, setSelectedCategories] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [selectsortOption, setSelectsortOption] = useState(sortOptions[0]);
@@ -53,14 +60,6 @@ const App = (props) => {
 	const [hasMore, setHasMore] = useState(true);
 	const [loading, setLoading] = useState(false);
 
-	const location = useLocation();
-	const navigate = useNavigate();
-	// const queryParams = queryString.parse(location.search);
-	const queryParams = useMemo(
-		() => queryString.parse(location.search),
-		[location]
-	);
-
 	const handleCategoryClick = (category, index) => {
 		let newSelectedCategories;
 		if (selectedCategories.includes(category)) {
@@ -72,7 +71,6 @@ const App = (props) => {
 		}
 
 		setSelectedCategories(newSelectedCategories);
-
 		updateQueryParams({ category: newSelectedCategories.join(',') });
 	};
 
@@ -128,6 +126,7 @@ const App = (props) => {
 				result.map((category, index) =>
 					strCategories.push(category.strCategory)
 				);
+
 				setCategories(strCategories);
 			} catch (e) {
 				console.log(e);

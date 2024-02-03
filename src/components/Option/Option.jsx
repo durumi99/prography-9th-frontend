@@ -33,8 +33,8 @@ const Option = (props) => {
 					<Select
 						ref={selectViewInputRef}
 						onChange={(viewOption) => {handleSelectViewChange(viewOption)}}
-					options={viewOptions}
-					defaultValue={viewOptions[1]}
+						options={viewOptions}
+						defaultValue={viewOptions[1]}
 					/>
 				</div>
 			</BrowserView>

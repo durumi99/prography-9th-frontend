@@ -1,4 +1,3 @@
-// ApiService.js
 import axios from 'axios';
 
 class ApiService {
@@ -11,6 +10,7 @@ class ApiService {
 	async getCategories() {
 		try {
 			const response = await this.api.get('/categories.php');
+
 			return response.data;
 		} catch (error) {
 			throw error;
@@ -20,6 +20,7 @@ class ApiService {
 	async getMealsByCategory(category) {
 		try {
 			const response = await this.api.get(`/filter.php?c=${category}`);
+
 			return response.data;
 		} catch (error) {
 			throw error;

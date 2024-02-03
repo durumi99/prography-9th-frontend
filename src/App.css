@@ -3,11 +3,10 @@
   justify-content: center;
   align-items: center;
   margin-top : 50px;
-  /* width: 100%; */
 }
 
 .row {
-  display: flex; /* 자식 노드를 가로로 배치하기 위해 flex 속성 적용 */
+  display: flex; 
   align-items: center; 
   gap: 10px;
   position: relative;
@@ -15,24 +14,17 @@
 }
 
 .result {
-  position: absolute; /* 절대적인 위치 설정 */
-  top: 10;/* 위쪽에 위치하도록 설정 */
+  position: absolute; 
 }
 
 .childContainer {
-  /* display:block; */
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
   width : 75%;
-  /* min-width: 500px; */
 }
 
 .option {
   margin-left: auto;
-}
-
-.imageList { 
-  /* height:100%; */
 }

@@ -22,11 +22,12 @@ const ImageList = (props) => {
   };
 
   const sortedImageList = sortData(imageData, sortOption.value);
-
   const observer = useRef();
 
   const lastImageRef = (node) => {
-    if (!loading) return;
+    if (!loading) {
+      return;
+    }
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver((entries) => {
@@ -35,7 +36,9 @@ const ImageList = (props) => {
       }
     });
 
-    if (node) observer.current.observe(node);
+    if (node) {
+      observer.current.observe(node);
+    }
   };
   const onLoad = () => {
     setLoading(true);

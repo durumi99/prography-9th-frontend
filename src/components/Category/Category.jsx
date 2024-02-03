@@ -10,8 +10,7 @@ const Category = (props) => {
         <button
           key={category}
           className={`categoryButton ${selectedCategories.includes(category) ? 'isSelected' : ''}`}
-          onClick={() => handleCategoryClick(category, index)}
-        >
+          onClick={() => handleCategoryClick(category, index)}>
           {category}
         </button>
       ))}
