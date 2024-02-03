@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+// import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import Category from './components/Category/Category';
@@ -17,6 +18,10 @@ const App = (props) => {
 	const [selectedCategories, setSelectedCategories] = useState([]);
 
 	const handleCategoryClick = (category, index) => {
+		// const queryParams = new URLSearchParams(location.search);
+		// queryParams.set('category', category);
+		// history.push({ search: queryParams.toString() });
+
 		if (selectedCategories.includes(category)) {
 			// 이미 선택되어 있던 경우, 선택 취소
 			setSelectedCategories(
@@ -90,6 +95,10 @@ const App = (props) => {
 		fetchData();
 	}, []);
 
+	// useEffect(() => {
+	// 	console.log(currentResultCount);
+	// }, [currentResultCount]);
+
 	useEffect(() => {
 		// console.log('렌더링 될때마다 실행');
 		// console.log(selectedCategories);
@@ -99,19 +108,19 @@ const App = (props) => {
 					let queryString =
 						'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
 					let result = [];
-
+					// await setLoading(true);
 					await Promise.all(
 						selectedCategories.map(async (strCategory, index) => {
-							// console.log(strCategory);
 							const res = await axios.get(queryString + strCategory);
-							// console.log(res.data.meals);
-							// result.push(res.data.meals);
 							Array.prototype.push.apply(result, res.data.meals);
 						})
 					);
 
 					setImageData(result);
 					setResultCount(result.length);
+					setCurrentResultCount(Math.min(result.length, 20));
+					setHasMore(true);
+					// setLoading(false);
 				} catch (e) {
 					console.log(e);
 				}
@@ -120,10 +129,31 @@ const App = (props) => {
 		} else {
 			setImageData([]);
 			setResultCount(0);
+			setCurrentResultCount(0);
 		}
 	}, [selectedCategories]);
 
-	// let observer = new IntersectionObserver(callback, options);
+	useEffect(() => {
+		if (currentResultCount === 0) setLoading(false);
+	}, [currentResultCount]);
+
+	const handleLoadMoreImages = () => {
+		// setLoading(true);
+
+		const loadCount = 20;
+		let newLoadedImages = currentResultCount + loadCount;
+
+		if (newLoadedImages >= imageData.length) {
+			newLoadedImages = imageData.length;
+			// setHasMore(false);
+		}
+
+		setCurrentResultCount(newLoadedImages);
+		// setLoading(false);
+	};
+
+	const [hasMore, setHasMore] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	return (
 		<div>
@@ -153,10 +183,23 @@ const App = (props) => {
 						</div>
 					</div>
 					<div className='imageList'>
+						{/* <ImageList
+							data={imageData}
+							currentResultCount={currentResultCount}
+							columnCount={selectViewOption.value}
+							sortOption={selectsortOption}
+							onLoadMore={handleLoadMoreImages}></ImageList> */}
 						<ImageList
 							data={imageData}
 							columnCount={selectViewOption.value}
-							sortOption={selectsortOption}></ImageList>
+							sortOption={selectsortOption}
+							loading={loading}
+							setLoading={setLoading}
+							hasMore={hasMore}
+							onLoadMore={handleLoadMoreImages}
+							setCurrentResultCount={setCurrentResultCount}
+							currentResultCount={currentResultCount}
+						/>
 					</div>
 				</div>
 			</div>
